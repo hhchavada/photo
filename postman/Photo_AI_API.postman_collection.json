@@ -1,0 +1,250 @@
+{
+  "info": {
+    "name": "Photo AI - Admin & User API",
+    "description": "Admin (categories, subcategories CRUD + file upload) and User (get all / get specific) APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "categoryId", "value": "" },
+    { "key": "subCategoryId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health",
+            "description": "Check if API is running."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Category\"\n}"
+            },
+            "url": "{{baseUrl}}/admin/categories",
+            "description": "Create a new category. Body: name (required, max 120 chars)."
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/admin/categories",
+            "description": "List all categories."
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "{{categoryId}}"]
+            },
+            "description": "Get single category. Replace categoryId with valid MongoDB ObjectId."
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "{{categoryId}}"]
+            },
+            "description": "Update category name. Replace categoryId with valid MongoDB ObjectId."
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "{{categoryId}}"]
+            },
+            "description": "Delete category and all its subcategories. Replace categoryId."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - SubCategories",
+      "item": [
+        {
+          "name": "Create SubCategory",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "categoryId", "value": "{{categoryId}}", "description": "Required - Category MongoDB ID", "type": "text" },
+                { "key": "name", "value": "My SubCategory", "description": "Required", "type": "text" },
+                { "key": "description", "value": "Optional description", "type": "text" },
+                { "key": "videoShow", "value": "false", "description": "true or false, default false", "type": "text" },
+                { "key": "image", "description": "Optional - image file (jpeg,png,gif,webp)", "type": "file", "src": [] },
+                { "key": "video", "description": "Optional - video file (mp4,webm,mov)", "type": "file", "src": [] }
+              ]
+            },
+            "url": "{{baseUrl}}/admin/subcategories",
+            "description": "Create subcategory. Use form-data: categoryId, name required; description, videoShow, image, video optional."
+          }
+        },
+        {
+          "name": "Get All SubCategories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/subcategories",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "subcategories"],
+              "query": [
+                { "key": "categoryId", "value": "{{categoryId}}", "description": "Optional - filter by category", "disabled": true }
+              ]
+            },
+            "description": "List all subcategories. Optionally add query categoryId to filter."
+          }
+        },
+        {
+          "name": "Get SubCategory by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/subcategories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "subcategories", "{{subCategoryId}}"]
+            },
+            "description": "Get single subcategory. Replace subCategoryId with valid MongoDB ObjectId."
+          }
+        },
+        {
+          "name": "Update SubCategory",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Updated SubCategory Name", "type": "text" },
+                { "key": "description", "value": "Updated description", "type": "text" },
+                { "key": "videoShow", "value": "true", "type": "text" },
+                { "key": "image", "description": "New image (replaces existing)", "type": "file", "src": [] },
+                { "key": "video", "description": "New video (replaces existing)", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/subcategories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "subcategories", "{{subCategoryId}}"]
+            },
+            "description": "Update subcategory. All fields optional (form-data). Replace subCategoryId."
+          }
+        },
+        {
+          "name": "Delete SubCategory",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/subcategories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "subcategories", "{{subCategoryId}}"]
+            },
+            "description": "Delete subcategory. Replace subCategoryId."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User - Categories",
+      "item": [
+        {
+          "name": "Get All Categories (with subcategories)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/categories",
+            "description": "Get all categories with their subcategories populated."
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Get single category with subcategories. Replace categoryId."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User - SubCategories",
+      "item": [
+        {
+          "name": "Get All SubCategories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories"],
+              "query": [
+                { "key": "categoryId", "value": "{{categoryId}}", "description": "Optional - filter by category", "disabled": true },
+                { "key": "videoShow", "value": "true", "description": "Optional - true or false", "disabled": true }
+              ]
+            },
+            "description": "Get all subcategories. Optional query: categoryId, videoShow."
+          }
+        },
+        {
+          "name": "Get SubCategory by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories", "{{subCategoryId}}"]
+            },
+            "description": "Get single subcategory. Replace subCategoryId."
+          }
+        }
+      ]
+    }
+  ]
+}
